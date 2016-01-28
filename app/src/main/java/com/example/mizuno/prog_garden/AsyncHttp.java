@@ -16,13 +16,10 @@ public class AsyncHttp extends AsyncTask<Double, Integer, Boolean> {
     HttpURLConnection urlConnection = null; //HTTPコネクション管理用
     Boolean flg = false;
 
-    int id, departure_id, arrival_id, flag = 0;
+    int id;
 
-    public AsyncHttp(int id, int departure_id, int arrival_id, int flag){
+    public AsyncHttp(int id){
         this.id = id;
-        this.departure_id = departure_id;
-        this.arrival_id = arrival_id;
-        this.flag = flag;
     }
 
 
@@ -34,13 +31,8 @@ public class AsyncHttp extends AsyncTask<Double, Integer, Boolean> {
         String postDataSample = null;
         try {
 
-        if(this.flag == 1){
-            urlinput = "http://garden.toitworks.com/measurements/add";
-            postDataSample = "id="+this.id+"&departure="+this.departure_id+"&arrival="+this.arrival_id;
-        }else if(this.flag == 2){
             urlinput = "http://garden.toitworks.com/positions/add";
             postDataSample = "measurement_id="+this.id+"&latitude="+contents[0]+"&longitude="+contents[1]+"&elevation="+contents[2];
-        }
 
             //HttpURLConnectionの利用手順
            /*

@@ -1,5 +1,6 @@
 package com.example.mizuno.prog_garden;
 
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,8 +23,8 @@ public class GardenActivity extends FragmentActivity implements OnMapReadyCallba
 
     private GoogleMap mMap;
     private LocationManager locationManager;
-    private Button button01, button02;
-    private EditText edittext01,edittext02,edittext03;
+    private Button button01, button02, button03;
+    private EditText edittext01;
     private AsyncHttp asynchttp;
     private int stopgps = 0;
 
@@ -39,20 +41,15 @@ public class GardenActivity extends FragmentActivity implements OnMapReadyCallba
 
         button01 = (Button) findViewById(R.id.button);
         button02 = (Button) findViewById(R.id.button2);
+        button03 = (Button) findViewById(R.id.button3);
         edittext01 = (EditText)findViewById(R.id.editText1);
-        edittext02 = (EditText)findViewById(R.id.editText2);
-        edittext03 = (EditText)findViewById(R.id.editText3);
 
         button01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                int id = Integer.parseInt(String.valueOf(edittext01.getText()));
-                int departure = Integer.parseInt(String.valueOf(edittext02.getText()));
-                int arrival = Integer.parseInt(String.valueOf(edittext03.getText()));
-                asynchttp = new AsyncHttp(id,departure,arrival,1);
-                asynchttp.execute();
                 stopgps = 1;
+                Toast toast = Toast.makeText(getApplicationContext(), "開始しました。", Toast.LENGTH_LONG);
+                toast.show();
             }
         });
 
@@ -61,6 +58,20 @@ public class GardenActivity extends FragmentActivity implements OnMapReadyCallba
             public void onClick(View view) {
                 //asynchttp.cancel(true);
                 stopgps = 2;
+                Toast toast = Toast.makeText(getApplicationContext(), "終了します。", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
+
+        button03.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //asynchttp.cancel(true);
+                Intent intent1 = new Intent(GardenActivity.this, GardenTraceActivity.class);
+                //intent1.putExtra("id", edittext01.getText());
+                String id = String.valueOf(edittext01.getText());
+                intent1.putExtra("id", id);
+                startActivity(intent1);
             }
         });
     }
@@ -116,9 +127,7 @@ public class GardenActivity extends FragmentActivity implements OnMapReadyCallba
 
         if(stopgps == 1) {
             int id = Integer.parseInt(String.valueOf(edittext01.getText()));
-            int departure = Integer.parseInt(String.valueOf(edittext02.getText()));
-            int arrival = Integer.parseInt(String.valueOf(edittext03.getText()));
-            asynchttp = new AsyncHttp(id, departure, arrival, 2);
+            asynchttp = new AsyncHttp(id);
             asynchttp.execute(latitude, longitude, elevation);
         }
     }
@@ -168,4 +177,6 @@ public class GardenActivity extends FragmentActivity implements OnMapReadyCallba
 
         super.onResume();
     }
+
+
 }
